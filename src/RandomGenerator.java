@@ -8,28 +8,37 @@ public class RandomGenerator {
         return new Random().nextInt((max + 1) - min);
     }
 
-    public List<Integer> getRandomNumbers(int numberCount, int min, int max) {
+    private List<Integer> getNumbers(int numberCount, int min, int max) {
         List<Integer> result = new ArrayList<>();
         int iterator = numberCount;
         while (iterator > 0) {
-            int number = getRandomNumber(min, max);
-            if (!result.isEmpty() && !result.contains(number)) {
-                result.add(number);
-                iterator--;
-            }
+            int number = getNumber(min, max);
+            result.add(number);
+            iterator--;
         }
         return result;
     }
 
     public int getRandomNumber(int min, int max) {
         int listCapacity = 10;
-        List<ListHolder> numbers = new ArrayList<>(10);
+        List<List<Integer>> numbers = new ArrayList<>(listCapacity);
         int iterator = listCapacity;
         while (iterator > 0) {
-            List<Integer> numberList = new ArrayList<>(getRandomNumbers(listCapacity, min, max));
-            numbers.add(new ListHolder(numberList));
+            numbers.add(new ArrayList<>(getNumbers(listCapacity, min, max)));
             iterator--;
         }
-        return numbers.get(getNumber(0, --listCapacity)).getList().get(getNumber(0, --listCapacity));
+        return numbers.get(getNumber(0, listCapacity - 1)).get(getNumber(0, listCapacity - 1));
     }
+
+    public List<Integer> getRandomNumbers(int numberCount, int min, int max) {
+        List<Integer> result = new ArrayList<>();
+        int iterator = numberCount;
+        while (iterator > 0) {
+            int number = getRandomNumber(min, max);
+            result.add(number);
+            iterator--;
+        }
+        return result;
+    }
+
 }
