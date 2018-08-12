@@ -1,54 +1,76 @@
+
 import java.io.IOException;
 import java.util.*;
 
 public class Runner {
     public static void main(String[] args) throws IOException {
         RandomGenerator generator = new RandomGenerator();
+        Queue<Integer> queue;
+        int quantity, min, max;
         boolean exit = false;
-        System.out.println("Random generator welcome you.");
+        System.out.println("\nThe random generator welcome you.");
         try {
-            pause();
             do {
+                pause();
                 System.out.println("\n\nMain menu:");
                 System.out.println(1 + ") Get a number;");
                 System.out.println(2 + ") Get an array of numbers;");
                 System.out.println(3 + ") Exit the generator.");
+                System.out.print("Choose a menu item: ");
                 int menuItem = inputNumber();
                 switch (menuItem) {
                     case 1:
-                        Queue<Integer> queue = getMin_MaxValue();
-                        int min = queue.poll();
-                        int max = queue.poll();
+                        queue = getQueueValues(menuItem);
+                        min = queue.poll();
+                        max = queue.poll();
                         System.out.print("\nYour number is: " + generator.getRandomNumber(min, max));
-                        pause();
                         break;
-                    case 2:  break;
+                    case 2:
+                        queue = getQueueValues(menuItem);
+                        quantity = queue.poll();
+                        min = queue.poll();
+                        max = queue.poll();
+                        List<Integer> list = generator.getRandomNumbers(quantity, min, max);
+                        System.out.println("\nYour numbers are:");
+                        int marker = (max <= 100)? 1 : (max <= 1000)? 2 : (max <= 10000)? 3 : (max <= 100000)? 4 : (max <= 1000000)? 5 : 6;
+                        String f;
+                        switch (marker) {
+                            case 1: f = "%2d"; break;
+                            case 2: f = "%3d"; break;
+                            case 3: f = "%4d"; break;
+                            case 4: f = "%5d"; break;
+                            case 5: f = "%6d"; break;
+                            default: f = "%7d";
+                        }
+                        String s;
+
+                        for (int i = 0; i < list.size(); i++) {
+                            if ((i + 1) % 10 == 0)
+                                s = "; \n";
+                            else
+                                s = ", ";
+                            System.out.printf(f + s, list.get(i));
+                        }
+                        break;
                     case 3:
                         exit = true;
                         break;
                     default: System.out.println("\nError: input a number (1-3):"); break;
                 }
             } while (!exit);
-        /*List<Integer> list = new RandomGenerator().getRandomNumbers(30, 0, 7);
-        String s;
-        for (int i = 0; i < list.size(); i++) {
-            if ((i + 1) % 10 == 0)
-                s = "; \n";
-            else
-                s = ", ";
-            System.out.print(list.get(i) + s);
-        }
-        System.out.println("\nPress any key to close.");
 
-            System.in.read();*/
         } catch (IOException e) {
-            pause();
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
 
     }
 
-    private static void pause() throws IOException{
-        System.out.println("\nPress any key to continue.");
+    private static void pause() throws IOException {
+        System.out.println("\nPress [Enter] to continue.");
+
         int tmp;
         do {
             tmp = System.in.read();
@@ -57,7 +79,6 @@ public class Runner {
 
     private static int inputNumber() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Please, input a number: ");
         String buffer = scanner.nextLine();
         if (checkInput(buffer)) return Integer.parseInt(buffer);
         else return 0;
@@ -70,11 +91,15 @@ public class Runner {
         return true;
     }
 
-    private static Queue<Integer> getMin_MaxValue() {
+    private static Queue<Integer> getQueueValues(int menuItem) {
         Queue<Integer> queue = new ArrayDeque<>();
-        System.out.println("Your min value:");
+        if (menuItem == 2) {
+            System.out.print("\nQuantity of numbers: ");
+            queue.add(inputNumber());
+        }
+        System.out.print("\nYour min value: ");
         queue.add(inputNumber());
-        System.out.println("Your max value:");
+        System.out.print("\nYour max value: ");
         queue.add(inputNumber());
         return queue;
     }
