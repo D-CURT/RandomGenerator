@@ -1,6 +1,10 @@
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+
 
 public class Runner {
     public static void main(String[] args) {
@@ -24,6 +28,7 @@ public class Runner {
                         min = queue.poll();
                         max = queue.poll();
                         System.out.print("\nYour number is: " + generator.getRandomNumber(min, max));
+
                         break;
                     case 2:
                         queue = getQueueValues(menuItem);
@@ -61,11 +66,7 @@ public class Runner {
 
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-
         }
-
     }
 
     private static void pause() throws IOException {

@@ -5,7 +5,7 @@ import java.util.Random;
 public class RandomGenerator {
 
     private int getNumber(int min, int max) {
-        return new Random().nextInt((max + 1) - min);
+        return new Random().nextInt((max + 1) - min) + min;
     }
 
     private List<Integer> getNumbers(int numberCount, int min, int max) {
@@ -20,7 +20,7 @@ public class RandomGenerator {
     }
 
     public int getRandomNumber(int min, int max) {
-        int listCapacity = 10;
+        int listCapacity = 1000;
         List<List<Integer>> numbers = new ArrayList<>(listCapacity);
         int iterator = listCapacity;
         while (iterator > 0) {
